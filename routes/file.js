@@ -78,4 +78,22 @@ Router.get("/download/:id", async (req, res) => {
   }
 });
 
+Router.get("/UserSearch/:key", async (request, response) => {
+  try {
+    const searchResult = await File.find({
+      $or: [
+        { title: { $regex: request.params.key } },
+        { description: { $regex: request.params.key } },
+      ],
+    });
+    response.send(searchResult);
+  } catch (error) {
+    response
+      .status(400)
+      .send(
+        "Error wile getting the search query. Please Try Something different"
+      );
+  }
+});
+
 module.exports = Router;
